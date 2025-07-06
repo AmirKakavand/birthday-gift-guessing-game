@@ -56,7 +56,7 @@ export default function ChatPage() {
         setTimeout(() => setRevealed(true), 1000);
       }
     } catch (error: unknown) {
-      console.log(error)
+      console.log(error);
       setMessages([
         ...newMessages,
         { role: "assistant", content: "Oops! Something went wrong 😢" },
@@ -73,68 +73,78 @@ export default function ChatPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-0 m-0 overflow-hidden">
       <AnimatePresence mode="wait">
-        {!revealed ? (
-          <motion.div
-            key="chat"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -50, transition: { duration: 0.8 } }}
-            className="w-full max-w-xl"
-          >
-            {/* Chat UI */}
-            <h1 className="text-2xl font-bold mb-4 text-center">
-              🎉 Guess Your Birthday Gift
-            </h1>
-            <div className="bg-gray-800 p-4 rounded-lg space-y-3 h-[60vh] overflow-y-auto">
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`text-sm ${
-                    msg.role === "user" ? "text-right" : "text-left"
+        {
+          <>
+            <>
+              {/* Conditionally render the Chat UI only when revealed is false */}
+              {!revealed && (
+                <motion.div
+                  initial={false}
+                  animate={{ opacity: revealed ? 0 : 1, y: revealed ? -50 : 0 }}
+                  transition={{ duration: 0.8 }}
+                  className={`w-full max-w-xl transition-opacity duration-800 ${
+                    revealed ? "pointer-events-none" : "pointer-events-auto"
                   }`}
                 >
-                  <span
-                    className={`inline-block px-3 py-2 rounded-md ${
-                      msg.role === "user" ? "bg-blue-600" : "bg-gray-700"
-                    }`}
-                  >
-                    {msg.content.replace("[GIFT_REVEAL]", "").trim()}
-                  </span>
-                </div>
-              ))}
-              {isLoading && (
-                <div className="text-left text-sm text-gray-400 animate-pulse">
-                  Assistant is typing...
-                </div>
+                  {/* Your existing Chat UI */}
+                  <h1 className="text-2xl font-bold mb-4 text-center">
+                    🎉 Guess Your Birthday Gift
+                  </h1>
+                  <div className="bg-gray-800 p-4 rounded-lg space-y-3 h-[60vh] overflow-y-auto">
+                    {messages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={`text-sm ${
+                          msg.role === "user" ? "text-right" : "text-left"
+                        }`}
+                      >
+                        <span
+                          className={`inline-block px-3 py-2 rounded-md ${
+                            msg.role === "user" ? "bg-blue-600" : "bg-gray-700"
+                          }`}
+                        >
+                          {msg.content.replace("[GIFT_REVEAL]", "").trim()}
+                        </span>
+                      </div>
+                    ))}
+                    {isLoading && (
+                      <div className="text-left text-sm text-gray-400 animate-pulse">
+                        Assistant is typing...
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-4 flex gap-2">
+                    <input
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      className="flex-1 px-4 py-2 rounded-md bg-gray-700 text-white outline-none"
+                      placeholder="Make a guess..."
+                    />
+                    <button
+                      onClick={sendMessage}
+                      className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </motion.div>
               )}
-            </div>
-            <div className="mt-4 flex gap-2">
-              <input
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                className="flex-1 px-4 py-2 rounded-md bg-gray-700 text-white outline-none"
-                placeholder="Make a guess..."
-              />
-              <button
-                onClick={sendMessage}
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md"
-              >
-                Send
-              </button>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="viewer"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 60, damping: 14 }}
-            className="w-full h-full"
-          >
-            <ModelViewer /> {/* The 3D model will show here */}
-          </motion.div>
-        )}
+
+              {/* Conditionally render the 3D model */}
+              {revealed && (
+                <motion.div
+                  initial={{ opacity: 0, y: 100 }}
+                  animate={{ opacity: revealed ? 1 : 0, y: revealed ? 0 : 100 }}
+                  transition={{ type: "spring", stiffness: 60, damping: 14 }}
+                  className="absolute top-0 left-0 w-full h-full transition-opacity duration-800"
+                >
+                  <ModelViewer /> {/* The 3D model will show here */}
+                </motion.div>
+              )}
+            </>
+          </>
+        }
       </AnimatePresence>
     </main>
   );
