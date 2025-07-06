@@ -3,15 +3,16 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
 import { Suspense, useRef } from "react";
+import * as THREE from "three"; // Import THREE types
 
 function Model() {
   const gltf = useGLTF("/models/JBL_GO4.glb");
-  const modelRef = useRef<any>(null);
+  const modelRef = useRef<THREE.Group>(null); // Correct type for the ref
 
   // Apply continuous rotation on the z-axis
   useFrame(() => {
     if (modelRef.current) {
-      modelRef.current.rotation.y += 0.005;
+      modelRef.current.rotation.y += 0.005; // Rotation on Y-axis
     }
   });
 

@@ -36,14 +36,19 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ content: reply });
-  } catch (error: any) {
-    console.error(
-      "❌ OpenRouter Error:",
-      error.response?.data || error.message
-    );
+  } catch (error: unknown) {
+  if (error instanceof axios.AxiosError) {
+    console.error('❌ OpenRouter Error:', error.response?.data || error.message);
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: 'Something went wrong' },
+      { status: 500 }
+    );
+  } else {
+    console.error('❌ Unexpected error:', error);
+    return NextResponse.json(
+      { error: 'Unexpected error' },
       { status: 500 }
     );
   }
+}
 }

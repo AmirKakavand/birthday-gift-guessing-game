@@ -55,7 +55,8 @@ export default function ChatPage() {
       if (reply.includes("[GIFT_REVEAL]")) {
         setTimeout(() => setRevealed(true), 1000);
       }
-    } catch (err) {
+    } catch (error: unknown) {
+      console.log(error)
       setMessages([
         ...newMessages,
         { role: "assistant", content: "Oops! Something went wrong 😢" },
