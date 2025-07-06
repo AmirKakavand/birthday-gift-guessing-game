@@ -1,13 +1,28 @@
 "use client";
 
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { OrbitControls, Stars, useGLTF } from "@react-three/drei";
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Suspense, useRef } from "react";
-import * as THREE from "three"; // Import THREE types
+import * as THREE from "three";
+
+useGLTF.preload("/models/JBL_GO4.glb")
 
 function Model() {
-  const gltf = useLoader(GLTFLoader, "/models/compressed_speaker.glb")
+  const gltf = useLoader(GLTFLoader, "/models/JBL_GO4.glb", (loader) => {
+    loader.load(
+      "/models/JBL_GO4.glb", // The path to the model
+      (gltf) => {
+        // This will run once the model has been successfully loaded
+        console.log("Model loaded successfully", gltf);
+      },
+      undefined, // You can add a progress callback here if needed
+      (error) => {
+        // This will run if there's an error loading the model
+        console.error("Error loading the model", error);
+      }
+    );
+  });
   const modelRef = useRef<THREE.Group>(null);
 
   // Apply continuous rotation on the z-axis
