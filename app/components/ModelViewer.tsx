@@ -1,28 +1,20 @@
 "use client";
 
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, ObjectMap, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, Stars, useGLTF } from "@react-three/drei";
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Suspense, useRef } from "react";
+import { GLTF, GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 
 useGLTF.preload("/models/JBL_GO4.glb")
 
-function Model() {
-  const gltf = useLoader(GLTFLoader, "/models/JBL_GO4.glb", (loader) => {
-    loader.load(
-      "/models/JBL_GO4.glb", // The path to the model
-      (gltf) => {
-        // This will run once the model has been successfully loaded
-        console.log("Model loaded successfully", gltf);
-      },
-      undefined, // You can add a progress callback here if needed
-      (error) => {
-        // This will run if there's an error loading the model
-        console.error("Error loading the model", error);
-      }
-    );
-  });
+interface ModelProps {
+  gltf: GLTF & ObjectMap
+}
+
+function Model({gltf}: ModelProps) {
+  console.log("and now we're inside Model")
+  
   const modelRef = useRef<THREE.Group>(null);
 
   // Apply continuous rotation on the z-axis
@@ -42,7 +34,13 @@ function Model() {
   );
 }
 
-export default function ModelViewer() {
+export default function ModelViewer({gltf}: ModelProps) {
+  // const gltf = useLoader(GLTFLoader, "/models/JBL_GO4.glb")
+  // useEffect(() => {
+  //   useGLTF.preload("/models/JBL_GO4.glb")
+  //   console.log("we do get here from the start!")
+  //   console.log(gltf)
+  // }, [gltf])
   return (
     <Canvas
       camera={{ position: [0.5, 0.2, -1], fov: 18 }}
@@ -72,7 +70,7 @@ export default function ModelViewer() {
         speed={3} // Optional animation speed
       />
       <Suspense fallback={null}>
-        <Model />
+        <Model gltf={gltf} />
       </Suspense>
       <OrbitControls />
     </Canvas>
