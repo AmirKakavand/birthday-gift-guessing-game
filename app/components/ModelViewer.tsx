@@ -1,9 +1,9 @@
 "use client";
 
-import { Canvas, ObjectMap, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, ObjectMap, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, useGLTF } from "@react-three/drei";
-import { GLTF, GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { Suspense, useEffect, useRef } from "react";
+import { GLTF } from 'three/addons/loaders/GLTFLoader.js';
+import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
 useGLTF.preload("/models/JBL_GO4.glb")
