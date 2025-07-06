@@ -1,13 +1,14 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { OrbitControls, Stars } from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Suspense, useRef } from "react";
 import * as THREE from "three"; // Import THREE types
 
 function Model() {
-  const gltf = useGLTF("/models/JBL_GO4.glb");
-  const modelRef = useRef<THREE.Group>(null); // Correct type for the ref
+  const gltf = useLoader(GLTFLoader, "/models/JBL_GO4.glb")
+  const modelRef = useRef<THREE.Group>(null);
 
   // Apply continuous rotation on the z-axis
   useFrame(() => {
