@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
-import { useGLTF } from "@react-three/drei";
 
 const ModelViewer = dynamic(() => import("../components/ModelViewer"), {
   ssr: false,
@@ -18,14 +15,6 @@ interface Message {
 }
 
 export default function ChatPage() {
-  const gltf = useLoader(GLTFLoader, "/models/JBL_GO4.glb")
-    useEffect(() => {
-      useGLTF.preload("/models/JBL_GO4.glb")
-      console.log("we do get here from the start!")
-      console.log(gltf)
-    }, [gltf])
-
-    // --------------------------------------------------------------------
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -150,7 +139,7 @@ export default function ChatPage() {
                   transition={{ type: "spring", stiffness: 60, damping: 14 }}
                   className="absolute top-0 left-0 w-full h-full transition-opacity duration-800"
                 >
-                  <ModelViewer gltf={gltf} /> {/* The 3D model will show here */}
+                  <ModelViewer /> {/* The 3D model will show here */}
                 </motion.div>
               )}
             </>
